@@ -43,3 +43,40 @@ document.addEventListener('DOMContentLoaded', () => {
     isOpen = !isOpen;
   });
 });
+
+// Lightbox đơn giản khi click ảnh
+document.querySelectorAll(".photoItem img").forEach((img) => {
+  img.addEventListener("click", () => {
+    // Tạo overlay
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = 0;
+    overlay.style.left = 0;
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.backgroundColor = "rgba(0,0,0,0.8)";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.zIndex = 9999;
+
+    // Tạo ảnh lớn
+    const largeImg = document.createElement("img");
+    largeImg.src = img.src;
+    largeImg.style.maxWidth = "90%";
+    largeImg.style.maxHeight = "90%";
+    largeImg.style.borderRadius = "20px";
+    largeImg.style.boxShadow = "0 0 20px rgba(255,255,255,0.7)";
+    largeImg.style.animation = "fadeIn 0.5s ease";
+
+    // Thêm ảnh vào overlay
+    overlay.appendChild(largeImg);
+    document.body.appendChild(overlay);
+
+    // Đóng overlay khi click
+    overlay.addEventListener("click", () => {
+      overlay.remove();
+    });
+  });
+});
+
