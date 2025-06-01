@@ -1,44 +1,45 @@
-// Thay đổi nội dung búc thư ở đây
-var letterContent =" Cảm ơn em thời gian qua đã dành thời gian cho anhh và anh có những điều muốn gởi gắm đến tình iu của anhh nhân ngày 1-6❤️. Cảm ơn em đã đến bên anhh những lúc anh cô đơn buồn tủi nhất. Em là ánh sáng, là động lực để anh cố gắng hơn mỗi ngày. Em làm cho anh luôn cảm thấy đặc biệt và hoàn hảo. Bên em anh cảm thấy vui và hạnh phúc lắm. Mong chúng ta sẽ có quãng thời gian hạnh phúc bên nhau thật lâu thật lâu nhiều hơn nữa em nhé. Anh chẳng biết nói gì ngoài lời cảm ơn em, anh yêu em💕"
+document.addEventListener('DOMContentLoaded', () => {
+  const openBtn = document.querySelector('.openBtn');
+  const leftFront = document.querySelector('.leftFront');
+  const leftBack = document.querySelector('.leftBack');
+  const letterContent = document.querySelector('.letterContent');
 
-// Tốc độ viết chữ. Số càng nhỏ tốc độ càng nhanh. 50 là tốc độ khá phù hợp
-durationWrite = 50 
+  let isOpen = false;
+  let isTyping = false;
 
-// Hiệu ứng gõ chữ
+  const message = `Cảm ơn em thời gian qua đã dành thời gian cho anhh và anh có những điều muốn gởi gắm đến tình iu của anhh nhân ngày 1-6❤️. Cảm ơn em đã đến bên anhh những lúc anh cô đơn buồn tủi nhất. Em là ánh sáng, là động lực để anh cố gắng hơn mỗi ngày. Bên em anh cảm thấy vui và hạnh phúc lắm. Mong chúng ta sẽ có quãng thời gian hạnh phúc bên nhau thật lâu thật lâu nhiều hơn nữa em nhé. Anh chẳng biết nói gì ngoài lời cảm ơn em, anh yêu em💕`;
 
-function effectWrite () {
-    var boxLetter = document.querySelector(".letterContent")
-    letterContentSplited = letterContent.split("")
-    
-    letterContentSplited.forEach((val, index) => {
-        setTimeout(() => {
-            boxLetter.innerHTML += val    
-        }, durationWrite* index)
-    })
-}
+  function typeWriter(text, element, delay = 50) {
+    element.textContent = '';
+    let i = 0;
+    return new Promise((resolve) => {
+      const timer = setInterval(() => {
+        element.textContent += text.charAt(i);
+        i++;
+        if (i >= text.length) {
+          clearInterval(timer);
+          resolve();
+        }
+      }, delay);
+    });
+  }
 
-window.addEventListener("load", () => {
-    setTimeout(() => {
-        document.querySelector(".container").classList.add("active")
-    }, 500)
-})
+  openBtn.addEventListener('click', async () => {
+    if (isTyping) return; // Không làm gì nếu đang gõ
 
-var openBtn = document.querySelector(".openBtn")
-openBtn.addEventListener("click", () => {
-    document.querySelector(".cardValentine").classList.add("active")
-    document.querySelector(".container").classList.add("close")
-})
-
-var cardValentine = document.querySelector(".cardValentine")
-
-cardValentine.addEventListener("click", () => {
-    cardValentine.classList.toggle("open")
-
-    if(cardValentine.className.indexOf("open") != -1) {
-        setTimeout(effectWrite, 500)
+    if (!isOpen) {
+      isTyping = true;
+      leftFront.style.transform = 'rotateY(180deg)';
+      leftBack.style.transform = 'rotateY(0deg)';
+      await typeWriter(message, letterContent, 40);
+      openBtn.textContent = 'Gập thiệp lại';
+      isTyping = false;
     } else {
-        setTimeout(() => {
-            document.querySelector(".letterContent").innerHTML = ""
-        }, 1000)
+      leftFront.style.transform = 'rotateY(0deg)';
+      leftBack.style.transform = 'rotateY(180deg)';
+      letterContent.textContent = '';
+      openBtn.textContent = 'Chạm vào đây đii em bé Dứaaa';
     }
-})
+    isOpen = !isOpen;
+  });
+});
